@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2');
+const mysql = require('mysql');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -9,20 +9,21 @@ app.use(bodyParser.json()); // Permite receber JSON no body das requisições
 
 // Conexão com o MySQL usando variáveis de ambiente
 const conexao = mysql.createConnection({
-    host: process.env.DB_HOST,       // Variável de ambiente para o host
-    user: process.env.DB_USER,       // Variável de ambiente para o usuário
-    password: process.env.DB_PASSWORD,  // Variável de ambiente para a senha
-    database: process.env.DB_NAME    // Variável de ambiente para o nome do banco
+    host: process.env.MYSQLHOST,       // Host do banco (variável do Railway)
+    user: process.env.MYSQLUSER,       // Usuário do banco (variável do Railway)
+    password: process.env.MYSQLPASSWORD,  // Senha do banco (variável do Railway)
+    database: process.env.MYSQL_DATABASE,    // Nome do banco (variável do Railway)
+    port: process.env.MYSQLPORT,        // Porta do banco (variável do Railway)
 });
 
 
 // Testando a conexão
-conexao.connect(err => {
+conexao.connect((err) => {
     if (err) {
         console.error('Erro ao conectar no MySQL:', err);
-    } else {
-        console.log('🔥 Conectado ao MySQL!');
+        return;
     }
+    console.log('Conexão com o banco de dados MySQL estabelecida!');
 });
 
 // 🔹 Rota para listar usuários
